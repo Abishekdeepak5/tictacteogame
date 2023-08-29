@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hello world</h1>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js" integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <label for="">Name:</label>
+    <input type="text" name="" id="name">
+    <br>
+    <label for="">Room id:</label>
+    <input type="text" name="" id="roomid">
+    <br>
+    <button onclick="disname()">Create</button>
+    <button onclick="joinRoom()">Join</button>
+    <label for="">send:</label>
+    <input type="text" name="" id="sendBox">
+    <button onclick="sendMessage()">Send</button>
+    <br>
+    <button onclick="joinRandom()">Random join</button>
+    <br>
+    <textarea name="" id="textbox" cols="10" rows="10"></textarea>
+    <div id="message"></div>
+</body>
+<script>
+
+var socket = io();
+var room;
+
+function disname(){ 
+    room=document.getElementById('roomid').value
+    socket.emit('createRoom', {
+    nickname:document.getElementById('name').value,
+    gameID:document.getElementById('roomid').value
+});
+}
+
+function joinRoom(){
+    room=document.getElementById('roomid').value;
+    socket.emit('joinRoom', {
+    nickname:document.getElementById('name').value,
+    roomid:document.getElementById('roomid').value
+});
+} 
+
+socket.on('createdRoom', function(data){
+    // console.log((data.players[data.turnIndex]).nickname);
+    console.log((data._id));
+    document.getElementById('textbox').value=(data.players[data.turnIndex]).nickname; 
+    room=data.gameID;   
+    console.log('room',room);
+    // room=data.players[data.turnIndex].nickname;
+    // room=data._id;
+});
+
+function joinRandom(){
+    socket.emit('joinRandom', {
+    nickname:document.getElementById('name').value
+});
+}
+
+
+
+
+socket.on('RoomJoin', function(data){
+    console.log(data);
+    room=data.gameID;
+    // document.getElementById('textbox').value=(data.players[data.turnIndex]).nickname
+});
+
+
+socket.on('receiveMessage',function(data){
+    document.getElementById('message').textContent+=':  ' + data;
+});
+
+function sendMessage(){
+    socket.emit('sendmessage', {
+    sendmessage:document.getElementById('sendBox').value,
+    roomid:room
+});
+}
+
+
+
+
+
+ 
+
+</script>
+</html>
+
+
+
+<!-- 
+// socket.on('message', function(data){document.write(data)});
+// socket.on('broadcast',function(data){
+//          document.body.innerHTML = '';
+//          document.write(data.description);
+//       });
+
+
+// socket.on('connectToRoom',function(data){
+//          document.body.innerHTML = '';
+//          document.write(data);
+//       }); -->
