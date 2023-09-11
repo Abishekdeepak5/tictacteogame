@@ -4,52 +4,229 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+<style>
+ 
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    margin: 0;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.Box{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+    /* background-color: #333; */
+}
+.changeToPlay{
+    display: none;
+}
+.boardContainer{
+        width: 100%;
+        height: 100vh;
+        position: absolute;
+        background-color: white;
+        top:0%;
+        left:0%;
+        display: flex;
+        align-items: center;
+    justify-content: center;
+    visibility: hidden;
+        /* transform: translate(-50%,-50%); */
+}
+.boardShow{
+    visibility: visible;
+}
+.board {
+    /* display:none; */
+    /* visibility: hidden; */
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    gap: 2px;
+    max-width: 306px;
+    margin: 0 auto;
+    
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cell:hover {
+    background-color: #f3f3f3;
+}
+
+/* .cell[data-cell]:hover::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: -1;
+} */
+
+.cell[data-cell]::before {
+    content: '';
+    position: absolute;
+    /* width: 100%; */
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.winCell{
+    text-decoration: line-through;
+    color: red;
+}
+
+.sendbtn{
+    height: inherit;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    margin: 0;
+    display:none;
+}
+button{
+    width: 100%;
+    background-color: rgb(12, 52, 184);
+    border: none;
+    margin: 2em;
+    padding: 0.5em 1em;
+    max-width: 400px;
+    color: white;
+    border-radius: 5px;
+    font-size: 1em;
+}
+input{
+    width: 100%;
+    max-width: 400px;
+}
+/* styles.css */
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 7px solid #3498db;
+    border-bottom: 7px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-top: 10px;
+    visibility: hidden;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loadon{
+    visibility: visible;
+}
+</style>
 </head>
 <body>
-    <h1>Abishek</h1>
+    <center style="font-size: 2em;">Hello world</center>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js" integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <label for="">Name:</label>
+    <div class="Box">
+    <label for="" style="text-align: start;">Name</label>
     <input type="text" name="" id="name">
-    <br>
-    <label for="">Room id:</label>
+    <!-- <div class="roombtn"> -->
+    <label for="">Room id</label>
     <input type="text" name="" id="roomid">
-    <br>
-    <button onclick="disname()">Create</button>
-    <button onclick="joinRoom()">Join</button>
+    <!-- </div> -->
+    <div class="loader"></div>
+    
+    <button onclick="disname()">Create Room</button>
+    <button onclick="joinRoom()">Join Room</button>
+    
+    <div class="sendbtn">
     <label for="">send:</label>
     <input type="text" name="" id="sendBox">
-    <button onclick="sendMessage()">Send</button>
-    <br>
+    <button onclick="sendMessage()" style="margin: 0;">Send</button>
+    </div>
+    
+
     <button onclick="joinRandom()">Random join</button>
     <br>
-    <textarea name="" id="textbox" cols="10" rows="10"></textarea>
+</div>
+        <div class="boardContainer">
+    <div class="board">
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <!-- Repeat for a total of 9 cells -->
+    </div>
+    </div>
+    <!-- <script src="script.js"></script> -->
     <div id="message"></div>
 </body>
 <script>
 
 var socket = io();
 var room;
-
+let isPlay=true;
+var currentPlayer;
+const load=document.querySelector('.loader');
+var btnclick=true;
 function disname(){ 
+    if(document.getElementById('name').value.trim().length>0 && document.getElementById('roomid').value.trim().length>0 && btnclick){
+    load.classList.add('loadon');
+    btnclick=false;
     room=document.getElementById('roomid').value
     socket.emit('createRoom', {
     nickname:document.getElementById('name').value,
     gameID:document.getElementById('roomid').value
-});
+});}
 }
 
 function joinRoom(){
+    if(document.getElementById('name').value.trim().length>0  && document.getElementById('roomid').value.trim().length>0 && btnclick){
+    load.classList.add('loadon');
+    
+    btnclick=false;
     room=document.getElementById('roomid').value;
     socket.emit('joinRoom', {
     nickname:document.getElementById('name').value,
     roomid:document.getElementById('roomid').value
-});
+});}
 } 
 
 socket.on('createdRoom', function(data){
+        currentPlayer='X';
+        isPlay=true;
+        console.log('x assign');
     // console.log((data.players[data.turnIndex]).nickname);
     console.log((data._id));
-    document.getElementById('textbox').value=(data.players[data.turnIndex]).nickname; 
     room=data.gameID;   
     console.log('room',room);
     // room=data.players[data.turnIndex].nickname;
@@ -57,18 +234,28 @@ socket.on('createdRoom', function(data){
 });
 
 function joinRandom(){
+    if(document.getElementById('name').value.trim().length>0 && btnclick){
+        btnclick=false;
+    load.classList.add('loadon');
     socket.emit('joinRandom', {
     nickname:document.getElementById('name').value
-});
+});}
 }
 
 
 
-
-socket.on('RoomJoin', function(data){
-    console.log(data);
-    room=data.gameID;
-    // document.getElementById('textbox').value=(data.players[data.turnIndex]).nickname
+socket.on('RoomJoin', function({roominfo,playerSym}){
+    console.log('Room join');
+    if(currentPlayer==null && playerSym=='O'){
+        currentPlayer='O';
+        isPlay=false;
+        console.log('o assign');
+    }
+    load.classList.remove('loadon');
+    document.querySelector('.boardContainer').classList.add('boardShow');
+    // console.log(data);
+    room=roominfo.gameID;
+    // currentPlayer=playerSym;
 });
 
 
@@ -76,6 +263,24 @@ socket.on('receiveMessage',function(data){
     document.getElementById('message').textContent+=':  ' + data;
 });
 
+socket.on('playexist', function({data}){
+   console.log(currentPlayer,isPlay);
+    load.classList.remove('loadon');
+    btnclick=true;
+});
+
+socket.on('exitBoth',function({ticID}){
+    document.querySelector('.boardContainer').classList.remove('boardShow');
+    load.classList.remove('loadon');
+    btnclick=true;
+    cells.forEach(cell => {
+        cell.textContent = '';
+    });
+    gameActive = true;
+    // Reload the current web page
+window.location.reload();
+
+});
 function sendMessage(){
     socket.emit('sendmessage', {
     sendmessage:document.getElementById('sendBox').value,
@@ -84,25 +289,119 @@ function sendMessage(){
 }
 
 
+const cells = document.querySelectorAll('[data-cell]');
+let gameActive = true;
 
 
+socket.on('opponentClick',function({clickIndex,player}){
+    console.log(isPlay);
+    // isPlay=!isPlay;
+    if(currentPlayer!=player){
+        isPlay=true;
+    }
+    console.log(clickIndex,player);
+    // document.getElementById('message').textContent+=':  ' + data;
+    cells[parseInt(clickIndex)].textContent=player;
+    if (checkWin()) {
+        endGame(false);
+    } else if (isBoardFull()) {
+        endGame(true);
+    } 
+    
+});
+// io.to(playID.toString()).emit('exitBoth',{playID});
+
+
+
+cells.forEach(cell => {
+    cell.addEventListener('click', handleCellClick);
+
+});
+
+const winningCombos = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+    [0, 4, 8], [2, 4, 6] // Diagonals
+];
+
+function handleCellClick(e) {
+    console.log(currentPlayer,isPlay);
+    if(isPlay){
+    const cell = e.target;
+    if (!gameActive || cell.textContent !== '') return;
+
+    // cell.textContent = currentPlayer;
+    const clickedIndex = Array.from(cells).indexOf(cell);
+    socket.emit('clickIndex', {
+        clickIndex:clickedIndex,
+        roomid:room
+});
+    // console.log(cells[clickedIndex].textContent);
+    // console.log(clickedIndex);
+    if (checkWin()) {
+        endGame(false);
+    } else if (isBoardFull()) {
+        endGame(true);
+    } 
+   isPlay=false;
+    }
+}
+
+function checkWin() {
+    for (const combo of winningCombos) {
+        const [a, b, c] = combo;
+        if (
+            cells[a].textContent &&
+            cells[a].textContent === cells[b].textContent &&
+            cells[a].textContent === cells[c].textContent
+        ) {
+            cells[a].classList.add('winCell');
+            cells[b].classList.add('winCell');
+            cells[c].classList.add('winCell');
+ 
+            return true;
+        }
+    }
+    return false;
+}
+
+function isBoardFull() {
+    return Array.from(cells).every(cell => cell.textContent !== '');
+}
+
+function endGame(draw) {
+    if (draw) {
+        alert("It's a draw!");
+        cells.forEach(cell => {
+        cell.textContent = '';
+    });
+    } else {
+        console.log(` wins!`);
+        setTimeout(() => {
+            cells.forEach(cell => {
+        cell.textContent = '';
+        cell.classList.remove('winCell');
+    });
+
+}, 1000);
+        
+}
+    // gameActive = false;
+}
+
+// Call a function to start/restart the game
+function startGame() {
+    cells.forEach(cell => {
+        cell.textContent = '';
+    });
+    gameActive = true;
+    // currentPlayer = 'X';
+}
+
+startGame();
 
  
 
 </script>
 </html>
 
-
-
-<!-- 
-// socket.on('message', function(data){document.write(data)});
-// socket.on('broadcast',function(data){
-//          document.body.innerHTML = '';
-//          document.write(data.description);
-//       });
-
-
-// socket.on('connectToRoom',function(data){
-//          document.body.innerHTML = '';
-//          document.write(data);
-//       }); -->
