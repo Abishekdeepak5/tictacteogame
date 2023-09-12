@@ -56,9 +56,9 @@ io.on('connection', async (socket) => {
       const roomID = room._id.toString();
       socket.join(gameID.toString());
       // console.log(roomID, gameID);
-      io.to(gameID.toString()).emit('createdRoom', room);
+      io.to(gameID.toString()).emit('createdRoom', {'roomObj':room,socketUID:socket.id});
       // console.log('S  id  ',socket.id);
-      io.to(gameID.toString()).emit('created', { gameID: gameID.toString() });
+      io.to(gameID.toString()).emit('created', { gameID: gameID.toString(),socketUID:socket.id });//changevarum
     } catch (e) {
       console.log(e);
     }
@@ -108,11 +108,11 @@ io.on('connection', async (socket) => {
           }
           const playerSym = 'O';
           const roominfo = room;
-          io.to(gameID.toString()).emit('RoomJoin', { roominfo, playerSym });
+          io.to(gameID.toString()).emit('RoomJoin', { roominfo, playerSym,'socUID':socket.id });
           io.to(gameID.toString()).emit('PlayerJoined', { 'id': socket.id });
           io.to(gameID.toString()).emit('randomplayerJoined', { 'id': socket.id });
           io.to(gameID.toString()).emit('joinFound', { ticID: gameID.toString(), xPlayer, oPlayer });
-          socket.emit('joinTic', { ticID: gameID.toString() });
+          socket.emit('joinTic', { ticID: gameID.toString(),socketUID:socket.id  });//changevarum
           // console.log('gameID', gameID);
         }
         // console.log('Joined');
@@ -139,8 +139,8 @@ io.on('connection', async (socket) => {
         const roomID = room._id.toString();
         socket.join(gameID.toString());
         // console.log(roomID, gameID);
-        io.to(gameID.toString()).emit('createdRoom', room);
-        io.to(gameID.toString()).emit('created', { gameID: gameID.toString() });
+        io.to(gameID.toString()).emit('createdRoom', {'roomObj':room,socketUID:socket.id});
+        io.to(gameID.toString()).emit('created', { gameID: gameID.toString(),socketUID:socket.id  });//changevarum
       } catch (e) {
         console.log(e);
       }
@@ -190,10 +190,10 @@ io.on('connection', async (socket) => {
 
         // io.to(roomid.toString()).emit('RoomJoin',room);
         const roominfo = room;
-        io.to(roomid.toString()).emit('RoomJoin', { 'roominfo': room, 'playerSym': 'O' });
+        io.to(roomid.toString()).emit('RoomJoin', { 'roominfo': room, 'playerSym': 'O','socketUID':socket.id});
         io.to(roomid.toString()).emit('PlayerJoined', { 'id': socket.id });
         io.to(roomid.toString()).emit('joinFound', { ticID: roomid.toString(), xPlayer, oPlayer });
-        socket.emit('joinTic', { ticID: roomid.toString() });
+        socket.emit('joinTic', { ticID: roomid.toString(),socketUID:socket.id });//changevarum
         // console.log("Roomid", roomid.toString());
       }
 
@@ -224,8 +224,9 @@ io.on('connection', async (socket) => {
 
   socket.on('sendmessage', function (data) {
     const { sendmessage, roomid } = data;
+    console.log(sendmessage);
     // console.log(roomid, sendmessage);
-    io.to(roomid.toString()).emit('receiveMessage', sendmessage);
+    io.to(roomid.toString()).emit('receiveMessage',{'receiveMessage':sendmessage,'socketUID':socket.id});
   });
 
   socket.on('clickIndex', async (data) => {
