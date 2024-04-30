@@ -8,219 +8,9 @@
     <title>Abishek Tic Tac Toe</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9540581646508499"
      crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
-            margin: 0;
-            /* display: flex;
-    justify-content: center;
-    align-items: center; */
-            height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .container {
-            text-align: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .Box {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            margin: 0 auto;
-            /* background-color: #333; */
-        }
-
-        .changeToPlay {
-            display: none;
-        }
-
-        .boardContainer {
-            width: 100%;
-            /* height: 100vh; */
-            position: absolute;
-            background-color: white;
-            top: 0%;
-            left: 0%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            visibility: hidden;
-            /* transform: translate(-50%,-50%); */
-        }
-
-        .boardShow {
-            visibility: visible;
-        }
-
-        .board {
-            /* display:none; */
-            /* visibility: hidden; */
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            gap: 2px;
-            max-width: 306px;
-            margin: 0 auto;
-            margin: 4em 0;
-
-        }
-
-        .cell {
-            width: 100px;
-            height: 100px;
-            border: 1px solid #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 32px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .cell:hover {
-            background-color: #f3f3f3;
-        }
-
-        /* .cell[data-cell]:hover::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
-    z-index: -1;
-} */
-
-        .cell[data-cell]::before {
-            content: '';
-            position: absolute;
-            /* width: 100%; */
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.7);
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .winCell {
-            text-decoration: line-through;
-            color: red;
-        }
-
-        .sendbtn {
-            height: inherit;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            margin: 0;
-            display: none;
-        }
-
-        button {
-            width: 100%;
-            background-color: rgb(12, 52, 184);
-            border: none;
-            margin: 2em;
-            padding: 0.5em 1em;
-            max-width: 400px;
-            color: white;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-
-        input {
-            width: 100%;
-            max-width: 400px;
-        }
-
-        /* styles.css */
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 7px solid #3498db;
-            border-bottom: 7px solid #3498db;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin-top: 10px;
-            visibility: hidden;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loadon {
-            visibility: visible;
-        }
-
-        #chat-box {
-            max-width: 600px;
-            width: 90%;
-            margin: 0 auto;
-            height: 300px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            overflow-y: scroll;
-        }
-
-        #message-input {
-            max-width: 600px;
-            width: 90%;
-            margin: 0 auto;
-            padding: 5px;
-        }
-
-        #send-button {
-            max-width: 600px;
-            width: 90%;
-            margin: 0 auto;
-            padding: 5px;
-            margin-top: 5px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-bottom: 5em;
-        }
-        .sendContainer{
-            display:flex;
-            justify-content: end;
-            margin-bottom: 0.5em;
-        }
-        .sendMess{
-                background-color: rgba(112, 197, 126, 0.548);
-                max-width: 80%;
-                text-align: center;
-                width: fit-content;
-                padding: 0.5em;
-                border-radius: 5px;
-        }
-        .recContainer{
-            display:flex;
-            justify-content: start;
-        }
-        .recMess{
-                background-color: rgba(208, 204, 226, 0.493);
-                max-width: 80%;
-                text-align: center;
-                width: fit-content;
-                padding: 0.5em;
-                border-radius: 5px;
-        }
-    </style>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 
 <body>
@@ -228,25 +18,45 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"
         integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <div class="form-container">
+        <form class="form-fields">
+            <div class="form-field">
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" style="width: 100%;" id="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="to">Room ID</label>
+                    <input type="text" class="form-control" id="roomid">
+                </div>
+
+            </div>
+            <div class="w-100  d-flex justify-content-center">
+                <div class="loader" style="text-align: center;"></div>
+            </div>
+            <div class="text-center w-100">
+                <button class="btn btn-primary text-light text-center mt-2 w-100" onclick="disname()">Create Room</button>
+            </div>
+            <div class="d-flex">
+                <div class="text-center w-50">
+                    <button class="btn btn-primary text-light text-center mt-2 w-100" onclick="joinRoom()">Join Room</button>
+                </div>
+
+                <div class="text-center ms-2  w-50">
+                    <button class="btn btn-primary text-light text-center mt-2 w-100" onclick="joinRandom()">Random join</button>
+                </div>
+            </div>  
+        </form>
+    </div>
     <div class="Box">
-        <label for="" style="text-align: start;">Name</label>
-        <input type="text" name="" id="name">
-        <!-- <div class="roombtn"> -->
-        <label for="">Room id</label>
-        <input type="text" name="" id="roomid">
-        <!-- </div> -->
-        <div class="loader"></div>
-
-        <button onclick="disname()">Create Room</button>
-        <button onclick="joinRoom()">Join Room</button>
-
+        <!-- <div class="loader"></div> -->
         <div class="sendbtn">
             <label for="">send:</label>
             <input type="text" name="" id="sendBox">
             <button onclick="sendMessage()" style="margin: 0;">Send</button>
-
         </div>
-        <button onclick="joinRandom()">Random join</button>
         <br>
     </div>
     <div class="boardContainer">
@@ -260,7 +70,6 @@
             <div class="cell" data-cell></div>
             <div class="cell" data-cell></div>
             <div class="cell" data-cell></div>
-            <!-- Repeat for a total of 9 cells -->
         </div>
         <div id="chat-box"></div>
         <input type="text" id="message-input" placeholder="Type a message...">
@@ -270,6 +79,7 @@
     </div>
 
     <div id="message"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 <script>
 
