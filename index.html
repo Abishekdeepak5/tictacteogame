@@ -366,6 +366,7 @@
     }
     socket.on('receiveMessage', function ({ receiveMessage, socketUID }) {
         const messageElement = document.createElement("div");
+        console.log(socketUID,socUID,"Hello");
         if (socketUID == socUID) {
             messageElement.innerHTML=` <div class="sendContainer">
             <div class="sendMess">${receiveMessage}</div>
@@ -441,6 +442,7 @@
             isPlay = false;
             console.log('o assign');
             socUID = socketUID;
+            console.log(socketUID,socUID);
         }
         load.classList.remove('loadon');
         document.querySelector('.boardContainer').classList.add('boardShow');
